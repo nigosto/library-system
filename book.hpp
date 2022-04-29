@@ -40,6 +40,10 @@ public:
     void print(std::ostream &os = std::cout) const;
     void printnl(std::ostream &os = std::cout) const;
 
+    //selectors that output the text of the book from its corresponding file
+    void showTextByPages() const;
+    void showTextBySentences() const;
+
     // mutators for setting member variables
     void setTitle(const char *_title);
     void setAuthor(const char *_author);
