@@ -4,6 +4,7 @@
 #include <cassert>
 #include <cstring>
 #include <iostream>
+#include <cstdio>
 
 void toLowerCase(char *str)
 {
@@ -81,7 +82,19 @@ void Library::insert(const Book &book)
 
 void Library::remove(const char *_isbn, bool removeFile)
 {
-    // TODO
+    Book *book = findByISBN(_isbn);
+    if(removeFile) {
+        std::remove(book->filename());
+    }
+    if (book)
+    {
+        size_t index = book - m_books;
+        for (size_t i = index; i < m_size - 1; i++)
+        {
+            std::swap(m_books[i], m_books[i + 1]);
+        }
+        m_size--;
+    }
 }
 
 Book &Library::at(size_t position)
@@ -214,14 +227,15 @@ Book *Library::findByDescription(const char *_description)
 
 void Library::print(std::ostream &os) const
 {
-    for (size_t i = 0; i < m_size-1; i++)
+    for (size_t i = 0; i < m_size - 1; i++)
     {
         m_books[i].printnl(os);
     }
-    m_books[m_size-1].print(os);
+    m_books[m_size - 1].print(os);
 }
 
-void Library::printnl(std::ostream &os) const {
+void Library::printnl(std::ostream &os) const
+{
     print(os);
-    os<<std::endl;
+    os << std::endl;
 }
