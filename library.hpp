@@ -1,6 +1,7 @@
 #ifndef __LIBRARY_HPP
 #define __LIBRARY_HPP
 
+#include <iostream>
 #include "book.hpp"
 
 class Library
@@ -34,6 +35,10 @@ public:
     // selector that checks if the library has no books
     bool empty() const { return size() == 0; }
 
+    //selectors for printing all books of the library on a separate line
+    void print(std::ostream &os = std::cout) const;
+    void printnl(std::ostream &os = std::cout) const;
+
     // mutator inserting book
     void insert(const Book &book);
 
@@ -54,13 +59,13 @@ public:
     // mutator that reverses the order of the books in the array
     void reverse();
 
-    // mutators that search a book by its name, author or ISBN
-    Book &findByName();
-    Book &findByAuthor();
-    Book &findByISBN();
+    // mutators that search a book by its name, author or ISBN and returns pointer to that book (or a nullptr if it could not find such book)
+    Book *findByTitle(const char* _title);
+    Book *findByAuthor(const char* _author);
+    Book *findByISBN(const char* _isbn);
 
-    // mutator that searches a book by part of its Description
-    Book &findByDescription();
+    // mutator that searches a book by part of its Description and returns pointer to that book (or a nullptr if it could not find such book)
+    Book *findByDescription(const char* _description);
 };
 
 #endif
