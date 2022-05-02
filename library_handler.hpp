@@ -6,6 +6,7 @@
 
 class LibraryHandler {
 private:
+    const char ADMIN_PASSWORD[6]{"admin"}; 
     Library m_library;
     bool m_isAdmin;
 public:
