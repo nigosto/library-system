@@ -9,20 +9,6 @@
 #include <stdio.h>
 #include <conio.h>
 
-//THIS CODE IS NOT MINE
-//it checks on which platform the program is being run and changes the new line character accordingly
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-char newLine = '\r';
-#elif __APPLE__
-char newLine = '\r';
-#elif __linux__
-char newLine = '\n';
-#elif __unix__
-char newLine = '\n';
-#else
-#error "Unknown compiler"
-#endif
-
 void LibraryHandler::readLibrary()
 {
     std::ifstream is{
@@ -87,21 +73,21 @@ void LibraryHandler::authenticate()
         {
             i++;
             password[i] = getch();
-            if (password[i] != newLine)
+            if (password[i] != '\r')
             {
                 std::cout << '*';
             }
             overflow = false;
-            while (i == std::strlen(ADMIN_PASSWORD) && password[i] != newLine)
+            while (i == std::strlen(ADMIN_PASSWORD) && password[i] != '\r')
             {
                 overflow = true;
                 password[i] = getch();
-                if (password[i] != newLine)
+                if (password[i] != '\r')
                 {
                     std::cout << '*';
                 }
             }
-        } while (password[i] != newLine && i < std::strlen(ADMIN_PASSWORD) + 1);
+        } while (password[i] != '\r' && i < std::strlen(ADMIN_PASSWORD) + 1);
 
         std::cout << std::endl;
 
@@ -119,21 +105,21 @@ void LibraryHandler::authenticate()
                 j++;
 
                 password[j] = getch();
-                if (password[j] != newLine)
+                if (password[j] != '\r')
                 {
                     std::cout << '*';
                 }
                 overflow = false;
-                while (j == std::strlen(ADMIN_PASSWORD) && password[j] != newLine)
+                while (j == std::strlen(ADMIN_PASSWORD) && password[j] != '\r')
                 {
                     overflow = true;
                     password[j] = getch();
-                    if (password[j] != newLine)
+                    if (password[j] != '\r')
                     {
                         std::cout << '*';
                     }
                 }
-            } while (password[j] != newLine && j < std::strlen(ADMIN_PASSWORD) + 1);
+            } while (password[j] != '\r' && j < std::strlen(ADMIN_PASSWORD) + 1);
 
             std::cout << std::endl;
         }
@@ -150,6 +136,203 @@ void LibraryHandler::authenticate()
 
 void LibraryHandler::readCommands()
 {
-    // m_library.printnl();
-    //  TODO
+    char command[10]{'\0'};
+    do
+    {
+        std::cout << "Enter command: ";
+        if (!std::cin)
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+
+        std::cin.getline(command, 10);
+
+        if (std::strcmp(command, "LIST ALL") == 0)
+        {
+            std::cout << "Choose criteria of sorting (title, author, rating): ";
+
+            char criteria[7]{'\0'};
+            if (!std::cin)
+            {
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            }
+
+            std::cin.getline(criteria, 7);
+
+            while (std::strcmp(criteria, "title") && std::strcmp(criteria, "author") && std::strcmp(criteria, "rating"))
+            {
+                std::cout << "Unrecognized criteria! Please enter again: ";
+                if (!std::cin)
+                {
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                }
+
+                std::cin.getline(criteria, 7);
+            }
+
+            if (std::strcmp(criteria, "title") == 0)
+            {
+                m_library.sortByTitle();
+            }
+            else if (std::strcmp(criteria, "author") == 0)
+            {
+                m_library.sortByAuthor();
+            }
+            else if (std::strcmp(criteria, "rating") == 0)
+            {
+                m_library.sortByRating();
+            }
+
+            std::cout << "Choose sorting order (ascending/descending): ";
+            char order[11]{'\0'};
+
+            if (!std::cin)
+            {
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            }
+
+            std::cin.getline(order, 11);
+
+            while (std::strcmp(order, "ascending") && std::strcmp(order, "descending"))
+            {
+                std::cout << "Unrecognized order! Please enter again: ";
+                if (!std::cin)
+                {
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                }
+
+                std::cin.getline(order, 11);
+            }
+
+            if (std::strcmp(order, "descending") == 0)
+            {
+                m_library.reverse();
+            }
+            std::cout << "---------------------" << std::endl;
+            m_library.printnl();
+            std::cout << "---------------------" << std::endl;
+        }
+        else if (std::strcmp(command, "FIND") == 0)
+        {
+            std::cout << "Choose search criteria (title, author, ISBN, description): ";
+
+            char criteria[12]{'\0'};
+            if (!std::cin)
+            {
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            }
+
+            std::cin.getline(criteria, 12);
+
+            while (std::strcmp(criteria, "title") && std::strcmp(criteria, "author") && std::strcmp(criteria, "ISBN") && std::strcmp(criteria, "description"))
+            {
+                std::cout << "Unrecognized criteria! Please enter again: ";
+                if (!std::cin)
+                {
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                }
+
+                std::cin.getline(criteria, 12);
+            }
+
+            std::cout << "Search: ";
+            char param[MAX_DESCRIPTION_SIZE]{'\0'};
+
+            if (!std::cin)
+            {
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            }
+
+            std::cin.getline(param, MAX_DESCRIPTION_SIZE);
+
+            if (std::strcmp(criteria, "title") == 0)
+            {
+                if (m_library.findByTitle(param))
+                {
+                    std::cout << "---------------------" << std::endl;
+                    std::cout << *(m_library.findByTitle(param)) << std::endl;
+                    std::cout << "---------------------" << std::endl;
+                }
+                else
+                {
+                    std::cout << "Could't find book!" << std::endl;
+                }
+            }
+            else if (std::strcmp(criteria, "author") == 0)
+            {
+                if (m_library.findByAuthor(param))
+                {
+                    std::cout << "---------------------" << std::endl;
+                    std::cout << *(m_library.findByAuthor(param)) << std::endl;
+                    std::cout << "---------------------" << std::endl;
+                }
+                else
+                {
+                    std::cout << "Could't find book!" << std::endl;
+                }
+            }
+            else if (std::strcmp(criteria, "ISBN") == 0)
+            {
+                if (m_library.findByISBN(param))
+                {
+                    std::cout << "---------------------" << std::endl;
+                    std::cout << *(m_library.findByISBN(param)) << std::endl;
+                    std::cout << "---------------------" << std::endl;
+                }
+                else
+                {
+                    std::cout << "Could't find book!" << std::endl;
+                }
+            }
+            else if (std::strcmp(criteria, "description") == 0)
+            {
+                if (m_library.findByDescription(param))
+                {
+                    std::cout << "---------------------" << std::endl;
+                    std::cout << *(m_library.findByDescription(param)) << std::endl;
+                    std::cout << "---------------------" << std::endl;
+                }
+                else
+                {
+                    std::cout << "Could't find book!" << std::endl;
+                }
+            }
+        } else if (std::strcmp(command, "ADD") == 0 && m_isAdmin) {
+            //TODO
+        } else if (std::strcmp(command, "REMOVE") == 0 && m_isAdmin) {
+            //TODO
+        } else if(std::strcmp(command, "SHOW TEXT") == 0 && std::cin) {
+            //TODO
+        } else if(std::strcmp(command, "END")) {
+            std::cout<<"Unrecognized command!"<<std::endl;
+        }
+    } while (std::strcmp(command, "END"));
+}
+
+void LibraryHandler::printListOfCommands() const
+{
+    std::cout << "---------------------" << std::endl;
+    std::cout << "List of commands:" << std::endl;
+    std::cout << "1. LIST ALL" << std::endl;
+    std::cout << "2. FIND" << std::endl;
+    std::cout << "3. SHOW TEXT" << std::endl;
+    if (m_isAdmin)
+    {
+        std::cout << "4. ADD" << std::endl;
+        std::cout << "5. REMOVE" << std::endl;
+        std::cout << "6. EXIT" << std::endl;
+    }
+    else
+    {
+        std::cout << "4. EXIT" << std::endl;
+    }
+    std::cout << "---------------------" << std::endl;
 }

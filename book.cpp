@@ -68,7 +68,7 @@ void Book::setIsbn(const char *_isbn)
 
 std::ostream &operator<<(std::ostream &os, const Book &book)
 {
-    return os << book.title() << ' ' << book.author() << ' ' << book.description() << ' ' << book.rating() << ' ' << book.isbn() << ' ' << book.filename() << std::endl;
+    return os <<"Title: " << book.title() << std::endl << "Author: " << book.author() << std::endl << "Description: " << book.description() << std::endl << "Rating: " << book.rating() << std::endl << "ISBN: " << book.isbn() << std::endl << "Name of file containig it: " << book.filename();
 }
 
 std::istream &operator>>(std::istream &is, Book &book)

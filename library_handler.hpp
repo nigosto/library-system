@@ -27,6 +27,8 @@ public:
 
     //the main method of this class that reads the input commands and executes them accordingly
     void readCommands();
+
+    void printListOfCommands() const;
 };
 
 #endif

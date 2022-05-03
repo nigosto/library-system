@@ -8,6 +8,7 @@ int main() {
     LibraryHandler handler;
 
     handler.authenticate();
+    handler.printListOfCommands();
     handler.readLibrary();
 
     handler.readCommands();
