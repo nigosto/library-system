@@ -6,6 +6,7 @@
 constexpr size_t MAX_NAMES_SIZE{256};
 constexpr size_t MAX_DESCRIPTION_SIZE{1025};
 constexpr size_t ISBN_LENGTH{14};
+constexpr double EPS = 1.0 / (1 << 30);
 
 class Book
 {
@@ -24,6 +25,7 @@ private:
     // stores exactly 13 digits and it can have 0s at the start
     char m_isbn[ISBN_LENGTH];
 
+    char* extractText() const;
 public:
     // constructor with default parameters
     Book(const char *_title = "<unknown>", const char *_author = "<unknown>", const char *_filename = "unknown.txt", const char *_description = "No description", double _rating = 1, const char *_isbn = "0000000000000");
@@ -41,7 +43,7 @@ public:
     void printnl(std::ostream &os = std::cout) const;
 
     //selectors that output the text of the book from its corresponding file
-    void showTextByPages() const;
+    void showTextByPages(size_t rows) const;
     void showTextBySentences() const;
 
     // mutators for setting member variables

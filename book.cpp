@@ -3,8 +3,7 @@
 #include <cmath>
 #include <cstring>
 #include <cassert>
-
-constexpr double EPS = 1.0 / (1 << 30);
+#include <fstream>
 
 Book::Book(const char *_title, const char *_author, const char *_filename, const char *_description, double _rating, const char *_isbn)
 {
@@ -68,7 +67,12 @@ void Book::setIsbn(const char *_isbn)
 
 std::ostream &operator<<(std::ostream &os, const Book &book)
 {
-    return os <<"Title: " << book.title() << std::endl << "Author: " << book.author() << std::endl << "Description: " << book.description() << std::endl << "Rating: " << book.rating() << std::endl << "ISBN: " << book.isbn() << std::endl << "Name of file containig it: " << book.filename();
+    return os << "Title: " << book.title() << std::endl
+              << "Author: " << book.author() << std::endl
+              << "Description: " << book.description() << std::endl
+              << "Rating: " << book.rating() << std::endl
+              << "ISBN: " << book.isbn() << std::endl
+              << "Name of file containig it: " << book.filename();
 }
 
 std::istream &operator>>(std::istream &is, Book &book)
@@ -89,12 +93,80 @@ std::istream &operator>>(std::istream &is, Book &book)
     return is;
 }
 
-void Book::showTextByPages() const
+char *Book::extractText() const
 {
-    // TODO
+    std::ifstream input{
+        filename(),
+        std::ios::in};
+
+    if (!input)
+    {
+        std::cout << "The file is missing!" << std::endl;
+        return nullptr;
+    }
+
+    input.seekg(0, std::ios::end);
+    size_t size = input.tellg();
+    input.seekg(0);
+    char *text = new char[size + 1]{'\0'};
+
+    for (size_t i = 0; i < size; i++)
+    {
+        text[i] = input.get();
+    }
+    return text;
+}
+
+void Book::showTextByPages(size_t rows) const
+{
+    char *text = extractText();
+    if (text != nullptr)
+    {
+        size_t i = 0;
+        size_t newLines = 0;
+        std::cout << "---------------------" << std::endl;
+        while (text[i])
+        {
+            std::cout << text[i];
+            if (text[i] == '\n')
+            {
+                newLines++;
+                if (newLines == rows)
+                {
+                    newLines = 0;
+                    std::cout << std::endl;
+                }
+            }
+            i++;
+        }
+        delete[] text;
+        std::cout << std::endl;
+        std::cout << "---------------------" << std::endl;
+    }
 }
 
 void Book::showTextBySentences() const
 {
-    // TODO
+    char *text = extractText();
+    if (text != nullptr)
+    {
+        size_t i = 0;
+        std::cout << "---------------------" << std::endl;
+        while (text[i])
+        {
+            std::cout << text[i];
+            if (text[i] == '!' || text[i] == '.' || text[i] == '?')
+            {
+                if (!(text[i + 1] && text[i + 1] == '\n'))
+                {
+                    i++;
+                    std::cout << std::endl;
+                }
+            }
+            i++;
+        }
+        delete[] text;
+        std::cout << std::endl;
+        std::cout << "---------------------" << std::endl;
+    }
 }

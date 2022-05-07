@@ -83,17 +83,24 @@ void Library::insert(const Book &book)
 void Library::remove(const char *_isbn, bool removeFile)
 {
     Book *book = findByISBN(_isbn);
-    if(removeFile) {
-        std::remove(book->filename());
-    }
     if (book)
     {
+        if (removeFile)
+        {
+            std::remove(book->filename());
+        }
+
         size_t index = book - m_books;
         for (size_t i = index; i < m_size - 1; i++)
         {
             std::swap(m_books[i], m_books[i + 1]);
         }
         m_size--;
+        std::cout << "Book successfully removed from the library!" << std::endl;
+    }
+    else
+    {
+        std::cout << "There is no book with that ISBN!" << std::endl;
     }
 }
 
@@ -175,8 +182,9 @@ Book *Library::findByTitle(const char *_title)
     return nullptr;
 }
 
-Book *Library::findByAuthor(const char *_author)
+Book *Library::findByAuthor(const char *_author, size_t& _size)
 {
+    Book* result = new Book[m_size]{};
     char *_authorCopy = new char[std::strlen(_author) + 1]{'\0'};
     std::strcpy(_authorCopy, _author);
     toLowerCase(_authorCopy);
@@ -187,11 +195,11 @@ Book *Library::findByAuthor(const char *_author)
         toLowerCase(author);
         if (std::strcmp(author, _authorCopy) == 0)
         {
-            return &m_books[i];
+            result[_size++] = m_books[i];
         }
     }
     delete[] _authorCopy;
-    return nullptr;
+    return result;
 }
 
 Book *Library::findByISBN(const char *_isbn)

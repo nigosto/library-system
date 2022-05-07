@@ -61,7 +61,7 @@ public:
 
     // mutators that search a book by its name, author or ISBN and returns pointer to that book (or a nullptr if it could not find such book)
     Book *findByTitle(const char* _title);
-    Book *findByAuthor(const char* _author);
+    Book *findByAuthor(const char* _author, size_t& _size);
     Book *findByISBN(const char* _isbn);
 
     // mutator that searches a book by part of its Description and returns pointer to that book (or a nullptr if it could not find such book)
