@@ -20,7 +20,7 @@ Book::Book(const char *_title, const char *_author, const char *_filename, const
 
 void Book::print(std::ostream &os) const
 {
-    os << title() << ' ' << author() << ' ' << isbn();
+    os <<"Title: "<< title() << std::endl <<"Author: "<< author() << std::endl << "ISBN: " << isbn() << std::endl;
 }
 
 void Book::printnl(std::ostream &os) const
@@ -114,6 +114,7 @@ char *Book::extractText() const
     {
         text[i] = input.get();
     }
+    input.close();
     return text;
 }
 

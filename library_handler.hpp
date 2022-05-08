@@ -9,6 +9,7 @@ private:
     const char ADMIN_PASSWORD[6]{"admin"}; 
     Library m_library;
     bool m_isAdmin;
+    std::istream& clearInput(std::istream& is = std::cin) const;
 public:
     //default constructor
     LibraryHandler() : m_isAdmin(false), m_library(Library()) {}
