@@ -60,12 +60,12 @@ public:
     void reverse();
 
     // mutators that search a book by its name, author or ISBN and returns pointer to that book (or a nullptr if it could not find such book)
-    Book *findByTitle(const char* _title);
-    Book *findByAuthor(const char* _author, size_t& _size);
-    Book *findByISBN(const char* _isbn);
+    Book *findByTitle(const char* _title) const;
+    Book *findByAuthor(const char* _author, size_t& _size) const;
+    Book *findByISBN(const char* _isbn) const;
 
     // mutator that searches a book by part of its Description and returns pointer to that book (or a nullptr if it could not find such book)
-    Book *findByDescription(const char* _description);
+    Book *findByDescription(const char* _description) const;
 };
 
 #endif

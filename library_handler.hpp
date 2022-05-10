@@ -9,7 +9,16 @@ private:
     const char ADMIN_PASSWORD[6]{"admin"}; 
     Library m_library;
     bool m_isAdmin;
+    
+    //function that clears the input if it is in error state
     std::istream& clearInput(std::istream& is = std::cin) const;
+
+    //helper functions to handle each command
+    void handleListAll();
+    void handleFind() const;
+    void handleAdd();
+    void handleRemove();
+    void handleShowText() const;
 public:
     //default constructor
     LibraryHandler() : m_isAdmin(false), m_library(Library()) {}

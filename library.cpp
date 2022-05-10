@@ -163,7 +163,7 @@ void Library::reverse()
     std::reverse(m_books, m_books + m_size);
 }
 
-Book *Library::findByTitle(const char *_title)
+Book *Library::findByTitle(const char *_title) const
 {
     char *_titleCopy = new char[std::strlen(_title) + 1]{'\0'};
     std::strcpy(_titleCopy, _title);
@@ -182,7 +182,7 @@ Book *Library::findByTitle(const char *_title)
     return nullptr;
 }
 
-Book *Library::findByAuthor(const char *_author, size_t& _size)
+Book *Library::findByAuthor(const char *_author, size_t& _size) const
 {
     Book* result = new Book[m_size]{};
     char *_authorCopy = new char[std::strlen(_author) + 1]{'\0'};
@@ -202,7 +202,7 @@ Book *Library::findByAuthor(const char *_author, size_t& _size)
     return result;
 }
 
-Book *Library::findByISBN(const char *_isbn)
+Book *Library::findByISBN(const char *_isbn) const
 {
     for (size_t i = 0; i < m_size; i++)
     {
@@ -214,7 +214,7 @@ Book *Library::findByISBN(const char *_isbn)
     return nullptr;
 }
 
-Book *Library::findByDescription(const char *_description)
+Book *Library::findByDescription(const char *_description) const
 {
     char *_descriptionCopy = new char[std::strlen(_description) + 1]{'\0'};
     std::strcpy(_descriptionCopy, _description);
