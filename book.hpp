@@ -22,7 +22,7 @@ private:
     // rating scale from 1 to 5
     double m_rating;
 
-    // stores exactly 13 digits and it can have 0s at the start
+    // stores exactly 13 characters
     char m_isbn[ISBN_LENGTH];
 
     char* extractText() const;

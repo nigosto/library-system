@@ -182,9 +182,9 @@ Book *Library::findByTitle(const char *_title) const
     return nullptr;
 }
 
-Book *Library::findByAuthor(const char *_author, size_t& _size) const
+Book *Library::findByAuthor(const char *_author, size_t &_size) const
 {
-    Book* result = new Book[m_size]{};
+    Book *result = new Book[m_size]{};
     char *_authorCopy = new char[std::strlen(_author) + 1]{'\0'};
     std::strcpy(_authorCopy, _author);
     toLowerCase(_authorCopy);
@@ -204,11 +204,14 @@ Book *Library::findByAuthor(const char *_author, size_t& _size) const
 
 Book *Library::findByISBN(const char *_isbn) const
 {
-    for (size_t i = 0; i < m_size; i++)
+    if (std::strlen(_isbn) == 13)
     {
-        if (std::strcmp(m_books[i].isbn(), _isbn) == 0)
+        for (size_t i = 0; i < m_size; i++)
         {
-            return &m_books[i];
+            if (std::strcmp(m_books[i].isbn(), _isbn) == 0)
+            {
+                return &m_books[i];
+            }
         }
     }
     return nullptr;

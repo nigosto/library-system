@@ -139,7 +139,7 @@ void LibraryHandler::handleAdd()
     char author[MAX_NAMES_SIZE]{'\0'};
     char filename[MAX_NAMES_SIZE]{'\0'};
     char description[MAX_DESCRIPTION_SIZE]{'\0'};
-    double rating;
+    double rating = 1;
     char isbn[ISBN_LENGTH]{'\0'};
 
     std::cout << "Please enter book's information:" << std::endl;
@@ -173,7 +173,14 @@ void LibraryHandler::handleRemove()
 {
     std::cout << "Please enter the ISBN of the book you wish to remove: ";
     char isbn[ISBN_LENGTH]{'\0'};
+
     clearInput().getline(isbn, ISBN_LENGTH);
+    while (!std::cin || std::strlen(isbn) != 13)
+    {
+        std::cout << "ISBN is not in the correct format! Please enter ISBN again: ";
+        clearInput().getline(isbn, ISBN_LENGTH);
+    }
+
     std::cout << "Do you wish to delete the file containing its text as well (yes/no): ";
     char answer[4]{'\0'};
     clearInput().getline(answer, 4);
@@ -422,10 +429,12 @@ void LibraryHandler::readCommands()
         else if (std::strcmp(command, "ADD") == 0 && m_isAdmin)
         {
             handleAdd();
+            saveLibrary();
         }
         else if (std::strcmp(command, "REMOVE") == 0 && m_isAdmin)
         {
             handleRemove();
+            saveLibrary();
         }
         else if (std::strcmp(command, "SHOW TEXT") == 0 && std::cin)
         {
